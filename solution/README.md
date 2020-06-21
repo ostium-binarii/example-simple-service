@@ -1,10 +1,22 @@
 # Solution: {github-username}
 
-**Date:** {date-completed}
+**Date:** 2020-06-22
 
 ## Summary
 
 {Add a summary here describing the overall solution in your own words.}
+
+http://sparkjava.com/documentation#getting-started
+
+CALL OUT- if we wanted to use somethinng more scalable then Spark, the current code
+architecture isn't a two way door. If we intended to replace Spark with something 
+more scalable, then we should have decoupled Spark Request/Responses from the handlers,
+for example SHOW CODE EXAMPLE 
+
+Logging: lombok log4j, mdc (AWS Cloudwatch)
+https://plugins.jetbrains.com/plugin/6317-lombok
+https://stackoverflow.com/questions/42829246/lombok-log4j2-annotation-doesnt-work-in-intellij-idea
+
 
 ## Requirements
 
@@ -38,7 +50,8 @@ curl http://localhost:5000/first_last_days  0.01s user 0.01s system 14% cpu 0.12
 1. What are the first and last dates represented in the relevant data?
 
 ```bash
-{Add command output here}
+curl http://localhost:4567/dataset-time-range
+{"maxDate":"2019-11-15","minDate":"1989-09-19"}
 ```
 
 2. What was the closing price of Facebook on January 1st, 2018?
