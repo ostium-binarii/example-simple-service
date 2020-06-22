@@ -117,7 +117,7 @@ public class FAANGFundReportingService implements Service {
     public GetTopGainingResponse getTopGaining() {
         Set<CompanyCode> companyCodes = dao.getCompanyCodes();
         // note TreeSet is not thread safe.
-        TreeSet<StockDailyGain> topDailyGains = new TreeSet<>();
+        TreeSet<StockDailyGain> topTenTracker = new TreeSet<>();
 
         for (CompanyCode companyCode : companyCodes) {
             TreeMap<Date,BigDecimal> closingPrices = dao.getClosingPrices(companyCode);
@@ -127,16 +127,16 @@ public class FAANGFundReportingService implements Service {
             for (Map.Entry<Date,BigDecimal> closingPrice : closingPrices.entrySet()) {
                 StockDailyGain stockDailyGain = processStockGain(companyCode, closingPrice, lastPrice);
                 lastPrice = stockDailyGain.getClosingPrice();
-                if (topDailyGains.size() < dailyGainsMaxSize) {
-                    topDailyGains.add(stockDailyGain);
+                if (topTenTracker.size() < dailyGainsMaxSize) {
+                    topTenTracker.add(stockDailyGain);
                 } else {
-                    topDailyGains.add(stockDailyGain);
-                    topDailyGains.pollFirst();
+                    topTenTracker.add(stockDailyGain);
+                    topTenTracker.pollFirst();
                 }
             }
         }
 
-        List<StockDailyGain> topTenGains = new ArrayList<>(topDailyGains);
+        List<StockDailyGain> topTenGains = new ArrayList<>(topTenTracker);
         Collections.reverse(topTenGains);
 
         return new GetTopGainingResponse(topTenGains);

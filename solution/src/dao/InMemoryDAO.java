@@ -6,6 +6,7 @@ import datautilities.Marshaller;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import model.CompanyCode;
+import model.Exception.CompanyNotFoundException;
 import model.Exception.DataLoadException;
 
 import java.math.BigDecimal;
@@ -96,9 +97,9 @@ public class InMemoryDAO implements DAO {
 
     private void checkExists(final CompanyCode companyCode) {
         if (!stockMetrics.containsKey(companyCode)) {
-            String message = "Given CompanyCode instance was null at the DAO!";
+            String message = "CompanyCode " + companyCode + " not found in data loaded to the InMemoryDao from " + dataLoader.getDataSource();
             log.error(message);
-            throw new IllegalArgumentException(message);
+            throw new CompanyNotFoundException(message);
         }
     }
 

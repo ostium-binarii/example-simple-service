@@ -25,7 +25,7 @@ public abstract class Handler {
     /**
      * Handles requests to API.
      */
-    abstract ServiceResponse handle(@NonNull final Request request);
+    public abstract ServiceResponse handle(@NonNull final Request request);
 
     /**
      * Handles request to APIs further applying common rules, such as global exception handling and logging.

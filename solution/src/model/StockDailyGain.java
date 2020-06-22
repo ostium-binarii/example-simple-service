@@ -1,5 +1,6 @@
 package model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * Represents a company's daily % increase or decrease from the prior (available) stock closing price.
  */
 @RequiredArgsConstructor
+@EqualsAndHashCode
 @Getter
 public class StockDailyGain implements Comparable<StockDailyGain> {
     private final CompanyCode companyCode;
