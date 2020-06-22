@@ -1,18 +1,40 @@
 package handler;
 
 import com.google.inject.Inject;
+import datautilities.Marshaller;
+import lombok.NonNull;
+import model.CompanyCode;
+import model.Exception.BadRequestException;
 import model.GetClosingPriceResponse;
-import org.apache.commons.lang.NotImplementedException;
 import service.Service;
 import spark.Request;
-import spark.Response;
+
+import java.text.ParseException;
+import java.util.Date;
 
 
 /**
- * TODO: Not Implemented Yet.
+ * Handler for the GetClosingPrice API.
+ *
+ * The API requires a request parameter representing company code (e.g. "AMZN" representing Amazon, note that this
+ * is case insensitive) and a query parameter in format YYYY-MM-DD (e.g. "2001-01-22"). A properly formatted request
+ * would look like:
+ * curl "http://localhost:4567/reportingapi/closing-price/nflx?date=2019-09-09"
+ *
+ * The response should look like:
+ * {"companyCode":{"code":"NFLX"},"date":"2019-09-09","price":294.34}
+ *
+ * PLEASE NOTE: currently the service is coded in such a way that the absence of a closing price for a given date
+ * returns an empty price (null). It is arguable whether the correct behaviour is to instead return a 404 error.
+ * In my opinion, we should return a 404 when a closing day is not found when we actually expect it, but return null
+ * when the closing day is legitimately missing. For example, we would return null price for Facebook, 2015-01-01
+ * because the market is closed on New Year's day, but we'd 404 on 2015-01-02.
  */
 public class GetClosingPriceHandler extends Handler {
-    public static String PATH = "/closing-price";
+    private static final String requestParamCompanyCode = "companycode";
+    private static final String requestQueryParamDate = "date";
+    public static final String PATH = "/closing-price/:" + requestParamCompanyCode;
+
     private final Service service;
 
     @Inject
@@ -26,8 +48,21 @@ public class GetClosingPriceHandler extends Handler {
     }
 
     @Override
-    public GetClosingPriceResponse handle(final Request request, final Response response) {
-        throw new NotImplementedException("Not implemented yet!");
+    public GetClosingPriceResponse handle(@NonNull final Request request) {
+        CompanyCode companyCode = null;
+        Date date = null;
+
+        try {
+            companyCode = new CompanyCode(request.params(requestParamCompanyCode).toUpperCase());
+            date = Marshaller.toDate(request.queryParams(requestQueryParamDate));
+        } catch (IllegalArgumentException | NullPointerException | ParseException e) {
+            throw new BadRequestException(
+                "Bad request param and/or query param. Request Param companycode: " + request.params(requestParamCompanyCode)
+                + " Query Param date: " + request.queryParams(requestQueryParamDate)
+            );
+        }
+
+        return service.getClosingPrice(companyCode, date);
     }
 
 }

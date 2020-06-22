@@ -1,5 +1,6 @@
 package dao;
 
+import lombok.NonNull;
 import model.CompanyCode;
 
 import java.math.BigDecimal;
@@ -18,18 +19,18 @@ public interface DAO {
     Set<CompanyCode> getCompanyCodes();
 
     /**
-     * TODO: NOT IMPLEMENTED.
+     * Returns the stock closing price given a company code and closing date.
      */
-    BigDecimal getClosingPrice(final CompanyCode companyCode, final Date startDate);
+    BigDecimal getClosingPrice(@NonNull final CompanyCode companyCode, @NonNull final Date date);
 
     /**
      * Returns the closing prices for all available dates for a given company.
      */
-    TreeMap<Date, BigDecimal> getClosingPrices(final CompanyCode companyCode);
+    TreeMap<Date, BigDecimal> getClosingPrices(@NonNull final CompanyCode companyCode);
 
     /**
      * TODO: NOT IMPLEMENTED.
      */
-    TreeMap<Date, BigDecimal> getClosingPrices(final CompanyCode companyCode, final Date startDate, final Date endDate);
+    TreeMap<Date, BigDecimal> getClosingPrices(@NonNull final CompanyCode companyCode, @NonNull final Date startDate, final Date endDate);
 
 }

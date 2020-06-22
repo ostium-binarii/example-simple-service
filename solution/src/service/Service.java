@@ -1,10 +1,14 @@
 package service;
 
+import lombok.NonNull;
+import model.CompanyCode;
 import model.Exception.CompanyNotFoundException;
 import model.GetAvgClosingPriceResponse;
 import model.GetClosingPriceResponse;
 import model.GetDatasetTimeRangeResponse;
 import model.GetTopGainingResponse;
+
+import java.util.Date;
 
 
 /**
@@ -17,9 +21,9 @@ public interface Service {
     GetDatasetTimeRangeResponse getDatasetTimeRange() throws CompanyNotFoundException;
 
     /**
-     * TODO: NOT IMPLEMENTED.
+     * Returns the stock closing price given a company code and closing date.
      */
-    GetClosingPriceResponse getClosingPrice();
+    GetClosingPriceResponse getClosingPrice(@NonNull final CompanyCode companyCode, @NonNull final Date date);
 
     /**
      * TODO: NOT IMPLEMENTED.

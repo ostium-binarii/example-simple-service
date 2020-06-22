@@ -2,6 +2,7 @@ package service;
 
 import com.google.inject.Inject;
 import dao.DAO;
+import lombok.NonNull;
 import model.CompanyCode;
 import model.GetAvgClosingPriceResponse;
 import model.GetClosingPriceResponse;
@@ -31,7 +32,7 @@ public class FAANGFundReportingService implements Service {
 
     /**
      * @see Service#getDatasetTimeRange()
-     * This implementation is O(m log(n)), where m is the number of companies in the entire dataSet and n is the
+     * This implementation is O(m log(n)), where m is the number of companies in the entire data set and n is the
      * number of all available stock price closing dates in each company.
      */
     public GetDatasetTimeRangeResponse getDatasetTimeRange() {
@@ -39,6 +40,8 @@ public class FAANGFundReportingService implements Service {
         Date maxDate = Date.from(Instant.ofEpochSecond(YEAR_1800));
         Date minDate = Date.from(Instant.ofEpochSecond(YEAR_2100));
 
+        // while impossible with the current data, an edge case to think about would be if all companies were
+        // completely new and had no stock price closing dates. The min/max dates would be of year 1800/2100
         for (CompanyCode companyCode : companyCodes) {
             TreeMap<Date, BigDecimal> companyClosingPrices = dao.getClosingPrices(companyCode);
             Date companyMaxDate = companyClosingPrices.lastKey();
@@ -52,15 +55,18 @@ public class FAANGFundReportingService implements Service {
             }
         }
 
-        return new GetDatasetTimeRangeResponse(maxDate, minDate);
+        return new GetDatasetTimeRangeResponse(minDate, maxDate);
     }
 
     /**
-     * TODO: Not implemented yet.
+     * @see Service#getClosingPrice(CompanyCode, Date)
+     * This implementation is O(log(n)) where n is the number of all stock price closing dates for a given company:
+     * @see dao.InMemoryDAO#getClosingPrice(CompanyCode, Date) 
      */
     @Override
-    public GetClosingPriceResponse getClosingPrice() {
-        throw new NotImplementedException("Not implemented yet!");
+    public GetClosingPriceResponse getClosingPrice(@NonNull final CompanyCode companyCode, @NonNull final Date date) {
+        BigDecimal closingPrice = dao.getClosingPrice(companyCode, date);
+        return new GetClosingPriceResponse(companyCode, date, closingPrice);
     }
 
     /**

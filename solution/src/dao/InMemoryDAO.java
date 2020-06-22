@@ -2,9 +2,10 @@ package dao;
 
 import com.google.inject.Inject;
 import datautilities.DataLoader;
+import datautilities.Marshaller;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import model.CompanyCode;
-import model.Exception.CompanyNotFoundException;
 import model.Exception.DataLoadException;
 import org.apache.commons.lang.NotImplementedException;
 
@@ -47,25 +48,27 @@ public class InMemoryDAO implements DAO {
     }
 
     /**
-     * TODO: NOT IMPLEMENTED.
+     * @see DAO#getClosingPrice(CompanyCode, Date)
      */
     @Override
-    public BigDecimal getClosingPrice(final CompanyCode companyCode, final Date startDate) {
-        throw new NotImplementedException("THIS ISN'T CODED YET");
+    public BigDecimal getClosingPrice(@NonNull final CompanyCode companyCode, @NonNull final Date date) {
+        checkExists(companyCode);
+        BigDecimal closingPrice = stockMetrics.get(companyCode).get(date);
+
+        log.debug("Closing price for company {} was {} on {} from source: in-memory data loaded from {}.",
+                companyCode, closingPrice, Marshaller.toReadableDate(date), dataLoader.getDataSource());
+
+        return closingPrice;
     }
 
     /**
      * @see dao.DAO#getClosingPrices(CompanyCode)
      */
     @Override
-    public TreeMap<Date, BigDecimal> getClosingPrices(final CompanyCode companyCode) {
+    public TreeMap<Date, BigDecimal> getClosingPrices(@NonNull final CompanyCode companyCode) {
+        checkExists(companyCode);
         TreeMap<Date, BigDecimal> closingPrices = stockMetrics.get(companyCode);
-        if (closingPrices == null) {
-            String message = "Company " + companyCode + " not found in closing prices data.";
-            log.warn(message);
-            throw new CompanyNotFoundException(message);
-        }
-        log.info("Found {} closing price records for company {} in the in-memory data loaded from {}.",
+        log.debug("Found {} closing price records for company {} from source: in-memory data loaded from {}.",
                 closingPrices.size(), companyCode, dataLoader.getDataSource());
         return closingPrices;
     }
@@ -76,6 +79,14 @@ public class InMemoryDAO implements DAO {
     @Override
     public TreeMap<Date, BigDecimal> getClosingPrices(final CompanyCode companyCode, final Date startDate, final Date endDate) {
         throw new NotImplementedException("THIS ISN'T CODED YET");
+    }
+
+    private void checkExists(final CompanyCode companyCode) {
+        if (companyCode == null) {
+            String message = "Given CompanyCode instance was null at the DAO!";
+            log.error(message);
+            throw new IllegalArgumentException(message);
+        }
     }
 
 }

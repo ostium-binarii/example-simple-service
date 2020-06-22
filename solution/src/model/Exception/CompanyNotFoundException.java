@@ -4,7 +4,6 @@ package model.Exception;
  * Thrown when a company cannot be found in the database upon a request for it.
  */
 public class CompanyNotFoundException extends RuntimeException {
-
     public CompanyNotFoundException() {
         super();
     }

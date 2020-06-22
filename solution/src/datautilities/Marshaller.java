@@ -9,7 +9,7 @@ import java.util.Date;
 
 
 /**
- * Handles marshalling and unmarshalling data at ingress and egress points of the service (e.g. transforms pojos
+ * Handles marshalling and unmarshalling data at, mainly, ingress and egress points of the service (e.g. transforms pojos
  * into json strings before sending to clients, or converts consumed data from files into appropriate Java objects).
  */
 public class Marshaller {
@@ -33,6 +33,13 @@ public class Marshaller {
      */
     public static Date toDate(final String yearMonthDay) throws ParseException {
         return YEAR_MONTH_DAY.parse(yearMonthDay);
+    }
+
+    /**
+     * Converts Java Date objects into human readable Strings.
+     */
+    public static String toReadableDate(final Date date) {
+        return YEAR_MONTH_DAY.format(date);
     }
 
 }

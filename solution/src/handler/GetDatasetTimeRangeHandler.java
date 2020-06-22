@@ -1,14 +1,23 @@
 package handler;
 
 import com.google.inject.Inject;
+import lombok.NonNull;
 import model.GetDatasetTimeRangeResponse;
 import service.Service;
 import spark.Request;
-import spark.Response;
 
 
 /**
  * Handler for the GetDataSetTimeRange API.
+ *
+ * The API requires no arguments/data other than a request to the appropriate endpoint, like so:
+ * curl http://localhost:4567/reportingapi/dataset-time-range
+ *
+ * The response should look like:
+ * {"minDate":"1989-09-19","maxDate":"2019-11-15"}
+ *
+ * PLEASE NOTE: Currently no handling is done in cases where there is no data at all, or if none of the companies in
+ * available data have any stock price clsoing dates.
  */
 public class GetDatasetTimeRangeHandler extends Handler {
     private static final String PATH = "/dataset-time-range";
@@ -25,7 +34,7 @@ public class GetDatasetTimeRangeHandler extends Handler {
     }
 
     @Override
-    public GetDatasetTimeRangeResponse handle(final Request request, final Response response) {
+    public GetDatasetTimeRangeResponse handle(@NonNull final Request request) {
         return service.getDatasetTimeRange();
     }
 

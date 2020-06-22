@@ -5,7 +5,6 @@ import model.GetAvgClosingPriceResponse;
 import org.apache.commons.lang.NotImplementedException;
 import service.Service;
 import spark.Request;
-import spark.Response;
 
 /**
  * TODO: Not Implemented Yet.
@@ -25,7 +24,7 @@ public class GetAvgClosingPriceHandler extends Handler {
     }
 
     @Override
-    public GetAvgClosingPriceResponse handle(final Request request, final Response response) {
+    public GetAvgClosingPriceResponse handle(final Request request) {
         throw new NotImplementedException("Not implemented yet!");
     }
 

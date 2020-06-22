@@ -50,14 +50,15 @@ curl http://localhost:5000/first_last_days  0.01s user 0.01s system 14% cpu 0.12
 1. What are the first and last dates represented in the relevant data?
 
 ```bash
-curl http://localhost:4567/dataset-time-range
-{"maxDate":"2019-11-15","minDate":"1989-09-19"}
+curl http://localhost:4567/reportingapi/dataset-time-range
+{"minDate":"1989-09-19","maxDate":"2019-11-15"}
 ```
 
 2. What was the closing price of Facebook on January 1st, 2018?
 
 ```bash
-{Add command output here}
+curl "http://localhost:4567/reportingapi/closing-price/fb?date=2018-01-01"
+{"companyCode":{"code":"FB"},"date":"2018-01-01","price":null}
 ```
 
 3. What was the average closing price of Amazon in the month of July 2015?

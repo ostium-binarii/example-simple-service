@@ -10,17 +10,17 @@ import java.util.Objects;
  */
 public class CompanyCode {
     private static final String TICKER_CONVENTION = "^[A-Z:\\.0-9]+$";
-    private final String companyCode;
+    private final String code;
 
-    public CompanyCode(final String companyCode) {
-        if (!companyCode.matches(TICKER_CONVENTION)) {
-            throw new IllegalArgumentException("C");
+    public CompanyCode(final String code) {
+        if (code == null || !code.matches(TICKER_CONVENTION)) {
+            throw new IllegalArgumentException("Given company code " + code + " must follow convention " + TICKER_CONVENTION);
         }
-        this.companyCode = companyCode;
+        this.code = code;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
+    public String getCode() {
+        return code;
     }
 
     @Override
@@ -28,17 +28,17 @@ public class CompanyCode {
         if (this == o) return true;
         if (!(o instanceof CompanyCode)) return false;
         CompanyCode that = (CompanyCode) o;
-        return getCompanyCode().equals(that.getCompanyCode());
+        return getCode().equals(that.getCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCompanyCode());
+        return Objects.hash(getCode());
     }
 
     @Override
     public String toString() {
-        return companyCode;
+        return code;
     }
 
 }

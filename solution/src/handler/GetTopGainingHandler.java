@@ -5,7 +5,6 @@ import model.GetTopGainingResponse;
 import org.apache.commons.lang.NotImplementedException;
 import service.Service;
 import spark.Request;
-import spark.Response;
 
 
 /**
@@ -26,7 +25,7 @@ public class GetTopGainingHandler extends Handler {
     }
 
     @Override
-    public GetTopGainingResponse handle(final Request request, final Response response) {
+    public GetTopGainingResponse handle(final Request request) {
         throw new NotImplementedException("Not implemented yet!");
     }
 

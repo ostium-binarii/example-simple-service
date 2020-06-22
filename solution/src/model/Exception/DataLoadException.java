@@ -5,7 +5,6 @@ package model.Exception;
  * memory, or when refreshing a cache from the database.
  */
 public class DataLoadException extends Exception {
-
     public DataLoadException() {
         super();
     }

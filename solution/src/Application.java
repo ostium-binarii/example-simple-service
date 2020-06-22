@@ -19,6 +19,8 @@ import static spark.Spark.get;
  */
 @Slf4j
 public class Application {
+    private static final String API_BASE_PATH = "/reportingapi";
+
     /**
      * Entry-point when running the application in a stand-alone manner (e.g. from an IDE or the command-line).
      * @param args command-line arguments.
@@ -30,19 +32,22 @@ public class Application {
     /**
      * Initializes the web server with predefined configurations. The following four endpoints should be available
      * upon successful initialization:
-     * http://localhost:4567/dataset-time-range
-     * http://localhost:4567/closing-price
-     * http://localhost:4567/avg-closing-price
-     * http://localhost:4567/top-gaining
+     * http://localhost:4567/reportingapi/dataset-time-range
+     * http://localhost:4567/reportingapi/closing-price/:companycode?date={yyyy-mm-dd}
+     * http://localhost:4567/reportingapi/avg-closing-price/:companycode?startdate={yyyy-mm-dd}&enddate={yyyy-mm-dd}
+     * http://localhost:4567/reportingapi/top-gaining
      */
     public void init() {
+        // note here that the Spark static method "get" is what defines the HTTP method. If many APIs of
+        // different HTTP method types were introduced, this would get messy. It would be better to have
+        // the particular HTTP method type live in the API handlers themselves.
         getConfiguredHandlers().forEach(
             handler -> get(
-                handler.getPath(),
+                API_BASE_PATH + handler.getPath(),
                 (request, response) -> Marshaller.toString(handler.handleExceptionally(request, response))
             )
         );
-        // TODO: configure global log tags with host and service name.
+        // note we should configure global log tags with host and service name.
         log.info("Application successfully initialized.");
     }
 

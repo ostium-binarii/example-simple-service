@@ -12,6 +12,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Getter
 public class GetDatasetTimeRangeResponse implements ServiceResponse {
-    private final Date maxDate;
     private final Date minDate;
+    private final Date maxDate;
 }
