@@ -11,7 +11,9 @@ import model.GetTopGainingResponse;
 import org.apache.commons.lang.NotImplementedException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeMap;
@@ -60,7 +62,8 @@ public class FAANGFundReportingService implements Service {
 
     /**
      * @see Service#getClosingPrice(CompanyCode, Date)
-     * This implementation is O(log(n)) where n is the number of all stock price closing dates for a given company:
+     * Including the operations in the DAO, this implementation is O(log(n)) where n is the number of all stock price
+     * closing dates for a given company:
      * @see dao.InMemoryDAO#getClosingPrice(CompanyCode, Date) 
      */
     @Override
@@ -70,11 +73,28 @@ public class FAANGFundReportingService implements Service {
     }
 
     /**
-     * TODO: Not implemented yet.
+     * @see Service#getAvgClosingPrice(CompanyCode, Date, Date)
+     * Inclduing the operations in the DAO, this implementation is O(log n + m) where n is the total number of dates
+     * for the given company and m is the number of days with data between the given start and end dates. Some 
+     * additional run time is tacked on from converting a SortedMap to Collection, but the exact amount is unknown.
+     * @see dao.InMemoryDAO#getClosingPrices(CompanyCode, Date, Date)
      */
     @Override
-    public GetAvgClosingPriceResponse getAvgClosingPrice() {
-        throw new NotImplementedException("Not implemented yet!");
+    public GetAvgClosingPriceResponse getAvgClosingPrice(
+        @NonNull final CompanyCode companyCode,
+        @NonNull final Date startDate,
+        @NonNull final Date endDate
+    ) {
+        Collection<BigDecimal> closingPrices = dao.getClosingPrices(companyCode, startDate, endDate);
+        BigDecimal sum = BigDecimal.ZERO;
+        for (BigDecimal closingPrice : closingPrices) {
+            sum = sum.add(closingPrice);
+        }
+        long numberOfDaysWithData = closingPrices.size();
+        BigDecimal avgClosingPrice = (numberOfDaysWithData > 0)
+                ? sum.divide(BigDecimal.valueOf(numberOfDaysWithData), RoundingMode.HALF_DOWN)
+                : null;
+        return new GetAvgClosingPriceResponse(companyCode, startDate, endDate, numberOfDaysWithData, avgClosingPrice);
     }
 
     /**

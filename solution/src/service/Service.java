@@ -26,9 +26,13 @@ public interface Service {
     GetClosingPriceResponse getClosingPrice(@NonNull final CompanyCode companyCode, @NonNull final Date date);
 
     /**
-     * TODO: NOT IMPLEMENTED.
+     * Returns the average of all stock closing prices from a specified start-date (inclusive) to an end-date (exclusive).
      */
-    GetAvgClosingPriceResponse getAvgClosingPrice();
+    GetAvgClosingPriceResponse getAvgClosingPrice(
+        @NonNull final CompanyCode companyCode,
+        @NonNull final Date startDate,
+        @NonNull final Date endDate
+    );
 
     /**
      * TODO: NOT IMPLEMENTED.

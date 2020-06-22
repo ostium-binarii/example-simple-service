@@ -64,7 +64,8 @@ curl "http://localhost:4567/reportingapi/closing-price/fb?date=2018-01-01"
 3. What was the average closing price of Amazon in the month of July 2015?
 
 ```bash
-{Add command output here}
+curl "http://localhost:4567/reportingapi/avg-closing-price/amzn?startdate=2015-07-01&enddate=2015-08-01"
+{"companyCode":{"code":"AMZN"},"startDate":"2015-07-01","endDate":"2015-08-01","numberOfDaysWithData":22,"avgPrice":478.71}
 ```
 
 4. Assuming the fund holds an equal number of shares of each company, what were the top 10 biggest gaining days? The output should include the day and the % change from the previous day's close.

@@ -14,7 +14,9 @@ import java.util.Date;
 
 
 /**
- * Handler for the GetClosingPrice API.
+ * Handler for the GetClosingPrice API. When invoked, returns the closing price for a given company code and date. If
+ * the stock market was closed on the requested date, a future date is requested, or the requested company was not
+ * publically traded on the requested date, this will return and empty price (i.e. null).
  *
  * The API requires a request parameter representing company code (e.g. "AMZN" representing Amazon, note that this
  * is case insensitive) and a query parameter in format YYYY-MM-DD (e.g. "2001-01-22"). A properly formatted request
@@ -24,11 +26,10 @@ import java.util.Date;
  * The response should look like:
  * {"companyCode":{"code":"NFLX"},"date":"2019-09-09","price":294.34}
  *
- * PLEASE NOTE: currently the service is coded in such a way that the absence of a closing price for a given date
- * returns an empty price (null). It is arguable whether the correct behaviour is to instead return a 404 error.
- * In my opinion, we should return a 404 when a closing day is not found when we actually expect it, but return null
- * when the closing day is legitimately missing. For example, we would return null price for Facebook, 2015-01-01
- * because the market is closed on New Year's day, but we'd 404 on 2015-01-02.
+ * PLEASE NOTE: While not currently coded to do so, in my opinion, we should return a 404 when a closing day is not
+ * found when we actually expect it, but return null when the closing day is legitimately missing. For example, we
+ * would return null price for Facebook, 2015-01-01 because the market is closed on New Year's day, but we'd 404
+ * on 2015-01-02.
  */
 public class GetClosingPriceHandler extends Handler {
     private static final String requestParamCompanyCode = "companycode";

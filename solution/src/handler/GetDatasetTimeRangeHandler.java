@@ -8,7 +8,8 @@ import spark.Request;
 
 
 /**
- * Handler for the GetDataSetTimeRange API.
+ * Handler for the GetDataSetTimeRange API. When invoked returns the first and last stock price closing dates in the
+ * available data.
  *
  * The API requires no arguments/data other than a request to the appropriate endpoint, like so:
  * curl http://localhost:4567/reportingapi/dataset-time-range

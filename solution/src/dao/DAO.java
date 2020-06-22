@@ -4,6 +4,7 @@ import lombok.NonNull;
 import model.CompanyCode;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeMap;
@@ -25,12 +26,20 @@ public interface DAO {
 
     /**
      * Returns the closing prices for all available dates for a given company.
+     *
+     * PLEASE NOTE: if we ever switched over to something like DynamoDB in the future, and decided to take
+     * advantage of GSIs/LSIs for performance instead of the in-memory data structures we chose in this
+     * project, the decision to return TreeMap here will probably make things harder to refactor.
      */
     TreeMap<Date, BigDecimal> getClosingPrices(@NonNull final CompanyCode companyCode);
 
     /**
-     * TODO: NOT IMPLEMENTED.
+     * Returns the closing prices for a given company from a specified start-date (inclusive) to an end-date (exclusive).
      */
-    TreeMap<Date, BigDecimal> getClosingPrices(@NonNull final CompanyCode companyCode, @NonNull final Date startDate, final Date endDate);
+    Collection<BigDecimal> getClosingPrices(
+        @NonNull final CompanyCode companyCode,
+        @NonNull final Date startDate,
+        @NonNull final Date endDate
+    );
 
 }

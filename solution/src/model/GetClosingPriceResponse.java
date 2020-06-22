@@ -9,7 +9,7 @@ import java.util.Date;
 
 
 /**
- *  Service level response for the GetClosingPrice API.
+ * Service level response for the GetClosingPrice API.
  */
 @RequiredArgsConstructor
 @Getter

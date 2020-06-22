@@ -7,9 +7,9 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import model.CompanyCode;
 import model.Exception.DataLoadException;
-import org.apache.commons.lang.NotImplementedException;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -54,10 +54,8 @@ public class InMemoryDAO implements DAO {
     public BigDecimal getClosingPrice(@NonNull final CompanyCode companyCode, @NonNull final Date date) {
         checkExists(companyCode);
         BigDecimal closingPrice = stockMetrics.get(companyCode).get(date);
-
         log.debug("Closing price for company {} was {} on {} from source: in-memory data loaded from {}.",
                 companyCode, closingPrice, Marshaller.toReadableDate(date), dataLoader.getDataSource());
-
         return closingPrice;
     }
 
@@ -74,11 +72,19 @@ public class InMemoryDAO implements DAO {
     }
 
     /**
-     * TODO: NOT IMPLEMENTED.
+     * @see DAO#getClosingPrices(CompanyCode, Date, Date)
      */
     @Override
-    public TreeMap<Date, BigDecimal> getClosingPrices(final CompanyCode companyCode, final Date startDate, final Date endDate) {
-        throw new NotImplementedException("THIS ISN'T CODED YET");
+    public Collection<BigDecimal> getClosingPrices(
+        @NonNull final CompanyCode companyCode,
+        @NonNull final Date startDate,
+        @NonNull final Date endDate
+    ) {
+        checkExists(companyCode);
+        Collection<BigDecimal> closingPrices = stockMetrics.get(companyCode).subMap(startDate, endDate).values();
+        log.debug("Found {} closing price records for company {} between {} and {} from source: in-memory data loaded from {}.",
+                closingPrices.size(), companyCode, Marshaller.toReadableDate(startDate), Marshaller.toReadableDate(endDate), dataLoader.getDataSource());
+        return closingPrices;
     }
 
     private void checkExists(final CompanyCode companyCode) {
