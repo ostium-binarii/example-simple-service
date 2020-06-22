@@ -44,7 +44,11 @@ public class Application {
         getConfiguredHandlers().forEach(
             handler -> get(
                 API_BASE_PATH + handler.getPath(),
-                (request, response) -> Marshaller.toString(handler.handleExceptionally(request, response))
+                (request, response) -> {
+                    String responseString = Marshaller.toString(handler.handleExceptionally(request, response));
+                    log.info("Sending response: {}", responseString);
+                    return responseString;
+                }
             )
         );
         // note we should configure global log tags with host and service name.

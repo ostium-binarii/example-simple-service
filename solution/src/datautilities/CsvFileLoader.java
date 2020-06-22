@@ -51,7 +51,7 @@ public class CsvFileLoader implements DataLoader {
         }
     }
 
-    // This incurs a one-time O(n) run complexity upon Application start up, where n is the number of records in all available data.
+    // This incurs a one-time O(n log n) run complexity upon Application start up, where n is the number of records in all available data.
     private Map<CompanyCode,TreeMap<Date,BigDecimal>> processFile(final String filePath) throws IOException, ParseException {
         Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(new FileReader(filePath));
         Map<CompanyCode,TreeMap<Date,BigDecimal>> stockMetrics = new HashMap<>();

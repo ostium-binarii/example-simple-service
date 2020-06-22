@@ -11,6 +11,7 @@ import model.Exception.DataLoadException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -19,11 +20,13 @@ import java.util.TreeMap;
 /**
  * Temporary DAO until a database is actually used. Loads data from a pre-configured data source into memory and
  * provides it for use by the service.
+ * PLEASE NOTE: some elements of thread safety and defensive copying are lacking in this class, leaving as-is for
+ * the sake of time.
  */
 @Slf4j
 public class InMemoryDAO implements DAO {
     private final DataLoader dataLoader;
-    // Note TreeMap is not thread safe, but all APIs are read only.
+    // Note TreeMap is not thread safe.
     private Map<CompanyCode,TreeMap<Date,BigDecimal>> stockMetrics;
 
     @Inject
@@ -41,10 +44,12 @@ public class InMemoryDAO implements DAO {
 
     /**
      * @see DAO#getCompanyCodes()
+     * PLEASE NOTE: in the interest of time, this only performs a shallow copy as opposed to a deep copy when
+     * returning the data.
      */
     @Override
     public Set<CompanyCode> getCompanyCodes() {
-        return stockMetrics.keySet();
+        return new HashSet<>(stockMetrics.keySet());
     }
 
     /**
@@ -54,21 +59,23 @@ public class InMemoryDAO implements DAO {
     public BigDecimal getClosingPrice(@NonNull final CompanyCode companyCode, @NonNull final Date date) {
         checkExists(companyCode);
         BigDecimal closingPrice = stockMetrics.get(companyCode).get(date);
-        log.debug("Closing price for company {} was {} on {} from source: in-memory data loaded from {}.",
+        log.info("Closing price for company {} was {} on {} from source: in-memory data loaded from {}.",
                 companyCode, closingPrice, Marshaller.toReadableDate(date), dataLoader.getDataSource());
         return closingPrice;
     }
 
     /**
      * @see dao.DAO#getClosingPrices(CompanyCode)
+     * PLEASE NOTE: in the interest of time, this only performs a shallow copy as opposed to a deep copy when
+     * returning the data. While BigDecimal instances are thread safe, note that Date is mutable.
      */
     @Override
     public TreeMap<Date, BigDecimal> getClosingPrices(@NonNull final CompanyCode companyCode) {
         checkExists(companyCode);
         TreeMap<Date, BigDecimal> closingPrices = stockMetrics.get(companyCode);
-        log.debug("Found {} closing price records for company {} from source: in-memory data loaded from {}.",
+        log.info("Found {} closing price records for company {} from source: in-memory data loaded from {}.",
                 closingPrices.size(), companyCode, dataLoader.getDataSource());
-        return closingPrices;
+        return new TreeMap<>(closingPrices);
     }
 
     /**
@@ -82,13 +89,13 @@ public class InMemoryDAO implements DAO {
     ) {
         checkExists(companyCode);
         Collection<BigDecimal> closingPrices = stockMetrics.get(companyCode).subMap(startDate, endDate).values();
-        log.debug("Found {} closing price records for company {} between {} and {} from source: in-memory data loaded from {}.",
+        log.info("Found {} closing price records for company {} between {} and {} from source: in-memory data loaded from {}.",
                 closingPrices.size(), companyCode, Marshaller.toReadableDate(startDate), Marshaller.toReadableDate(endDate), dataLoader.getDataSource());
         return closingPrices;
     }
 
     private void checkExists(final CompanyCode companyCode) {
-        if (companyCode == null) {
+        if (!stockMetrics.containsKey(companyCode)) {
             String message = "Given CompanyCode instance was null at the DAO!";
             log.error(message);
             throw new IllegalArgumentException(message);

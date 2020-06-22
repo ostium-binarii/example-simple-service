@@ -16,9 +16,6 @@ import spark.Request;
  *
  * The response should look like:
  * {"minDate":"1989-09-19","maxDate":"2019-11-15"}
- *
- * PLEASE NOTE: Currently no handling is done in cases where there is no data at all, or if none of the companies in
- * available data have any stock price clsoing dates.
  */
 public class GetDatasetTimeRangeHandler extends Handler {
     private static final String PATH = "/dataset-time-range";

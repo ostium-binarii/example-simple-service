@@ -31,7 +31,8 @@ public abstract class Handler {
      * Handles request to APIs further applying common rules, such as global exception handling and logging.
      * PLEASE NOTE: in the interest of time, the code below is not production standard in terms of things like
      * handling bad requests, logging, and responding well to the client. For example, per request, we'd be
-     * logging a lot more than the API, host, and ip.
+     * logging a lot more than the API, host, and ip-- at the very least we'd log the parameters, query
+     * parameters, payload, etc.
      */
     // normally we'd check if the request is null and if so, return a 400, but we're relying on the Spark API framework
     // to handle this. If @NonNull here throws an NPE we know something has likely gone wrong with Spark.

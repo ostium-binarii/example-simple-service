@@ -23,7 +23,7 @@ import java.util.Date;
  * curl "http://localhost:4567/reportingapi/avg-closing-price/amzn?startdate=2015-07-01&enddate=2015-08-01"
  *
  * The response should look like:
- * {"companyCode":{"code":"AMZN"},"startDate":"2015-07-01","endDate":"2015-08-01","numberOfDaysWithData":22,"avgPrice":478.71}
+ * {"companyCode":{"code":"AMZN"},"startDate":"2015-07-01","endDate":"2015-08-01","numberOfDaysWithData":22,"avgPrice":478.709090909090909}
  */
 public class GetAvgClosingPriceHandler extends Handler {
     private static final String requestParamCompanyCode = "companycode";
