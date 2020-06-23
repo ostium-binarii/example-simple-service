@@ -5,7 +5,8 @@
 ## Summary
 Lightweight reporting web service.
 
-###CallOuts
+**CallOuts**
+
 Forgive the lack of a class diagram or call flow diagrams, this took me a little longer than I expected. Also note, that in the interest of time, certain key practices in some areas, such as thread-safety, defensive copying, and logging best practices were less focused on. Also note that the code is brittle to change in certain places, such as if we need to switch over to a database (I point this and the other callout throughout the code in comments). It would have been easier to make a more durable solution if spec, or some hints were given about what a future "production" version of the project would need to look like: (e.g. we intend to migrate over to a database, note that the data may grow to large amounts, note that new companies may be added, note that data may need to be hourly, this is a reporting service and will not need to POST data for example, etc. etc. etc.)
 
 ## Stack
@@ -64,25 +65,29 @@ java -cp target/take-home-exercise-ostium-binarii-1.0.jar reporting.Application
 
 ## API Usage
 
-###GetDataSetTimeRange
+**GetDataSetTimeRange**
+
 Provides the first and last stock price closing dates in the entire available dataset. Simply requires hitting a static URL.
 ```bash
 curl "http://localhost:4567/reportingapi/dataset-time-range"
 ```
 
-###GetClosingPrice
+**GetClosingPrice**
+
 Provides the stock closing price for a given company and stock closing date. Requires a company stock ticker symbol (e.g. "goog") and a stock price closing date. The provided string for ticker symbol is case insensitive. Note that if no data is available for a date (such as when the stock market is closed) the price retunred from this will be "null".
 ```bash 
 curl "http://localhost:4567/reportingapi/closing-price/{TICKER_SYMBOL e.g. "amzn"}?date={YYYY_MM_DD}}"
 ```
 
-###GetAvgClosingPrice
+**GetAvgClosingPrice**
+
 Provides the average closing prices across a range of dates for a given company. Requires a case-insensitive stock ticker symbol and a start date (inclusive) and end date (exclusive).
 ```bash
 curl "http://localhost:4567/reportingapi/avg-closing-price/{TICKER_SYMBOL}?startdate={YYYY_MM_DD}&enddate={YYYY_MM_DD}"
 ```
 
-###GetTopGaining API
+**GetTopGaining API**
+
 Provides the top 10 stock closing prices by % increase from the prior date (for all time). Simply requires hitting a static URL.
 ```bash
 curl "http://localhost:4567/reportingapi/top-gaining"
