@@ -1,6 +1,7 @@
 package reporting.handler;
 
 import com.google.inject.Inject;
+import lombok.NonNull;
 import reporting.datautilities.Marshaller;
 import reporting.model.Exception.BadRequestException;
 import reporting.model.GetAvgClosingPriceResponse;
@@ -44,7 +45,7 @@ public class GetAvgClosingPriceHandler extends Handler {
     }
 
     @Override
-    public GetAvgClosingPriceResponse handle(final Request request) {
+    protected GetAvgClosingPriceResponse handle(@NonNull final Request request) {
         CompanyCode companyCode = null;
         Date startDate = null;
         Date endDate = null;

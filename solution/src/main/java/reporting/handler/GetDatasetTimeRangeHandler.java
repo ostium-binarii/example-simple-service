@@ -32,7 +32,7 @@ public class GetDatasetTimeRangeHandler extends Handler {
     }
 
     @Override
-    public GetDatasetTimeRangeResponse handle(@NonNull final Request request) {
+    protected GetDatasetTimeRangeResponse handle(@NonNull final Request request) {
         return service.getDatasetTimeRange();
     }
 

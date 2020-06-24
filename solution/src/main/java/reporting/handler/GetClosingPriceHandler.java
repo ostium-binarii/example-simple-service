@@ -50,7 +50,7 @@ public class GetClosingPriceHandler extends Handler {
     }
 
     @Override
-    public GetClosingPriceResponse handle(@NonNull final Request request) {
+    protected GetClosingPriceResponse handle(@NonNull final Request request) {
         CompanyCode companyCode = null;
         Date date = null;
 

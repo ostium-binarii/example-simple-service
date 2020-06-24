@@ -1,6 +1,7 @@
 package reporting.handler;
 
 import com.google.inject.Inject;
+import lombok.NonNull;
 import reporting.model.GetTopGainingResponse;
 import reporting.service.Service;
 import spark.Request;
@@ -45,7 +46,7 @@ public class GetTopGainingHandler extends Handler {
     }
 
     @Override
-    public GetTopGainingResponse handle(final Request request) {
+    protected GetTopGainingResponse handle(@NonNull final Request request) {
         return service.getTopGaining();
     }
 

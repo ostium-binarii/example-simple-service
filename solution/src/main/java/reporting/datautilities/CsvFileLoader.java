@@ -25,7 +25,7 @@ import java.util.TreeMap;
  */
 @Slf4j
 public class CsvFileLoader implements DataLoader {
-    // not ideal having a hardcoded file path, see
+    // it's not ideal having a hardcoded file path. See java doc above.
     private static final String FILE_PATH = "../closing_prices.csv";
 
     @Override

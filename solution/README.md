@@ -3,26 +3,30 @@
 **Date:** 2020-06-22
 
 ## Summary
-Lightweight reporting web service.
+Lightweight reporting web service. For the sake of time, the service loads data from the provided CSV file into memory, but provides some modularity to switch over to a seperate data source if need be.
+
+**![Class Diagram](ClassDiagram.pdf)**
+
+**![Call Flow Diagram: GetDatasetTimeRange]()**
 
 **CallOuts**
 
-Forgive the lack of a class diagram or call flow diagrams, this took me a little longer than I expected. Also note, that in the interest of time, certain key practices in some areas, such as thread-safety, defensive copying, and logging best practices were less focused on. Also note that the code is brittle to change in certain places, such as if we need to switch over to a database (I point this and the other callout throughout the code in comments). It would have been easier to make a more durable solution if spec, or some hints were given about what a future "production" version of the project would need to look like: (e.g. we intend to migrate over to a database, note that the data may grow to large amounts, note that new companies may be added, note that data may need to be hourly, this is a reporting service and will not need to POST data for example, etc. etc. etc.)
+The instructions ask for one commit per "Question"-- it seems the intention there is to be able to review the code for each API in isolation from the greater code base. Unfortunately, in most commits I included multiple changes (e.g. Answer to Question 2 and many changes to Question 1 implementation). Firstly, I recognize that this is not good practice in terms of commits/Code-Reviews. Changes pushed should be atomic and each commit should be concise for both reviewer ease as well as clean roll-backs. Also note, that in the interest of time, certain key practices, such as thread-safety, defensive copying, and logging best practices were less focused on. Furthermore the code is brittle to change in certain places, such as if we need to switch over to a database (I point this out throughout the code in comments). It may have been easier to make a more durable solution if spec, or some hints were given about what a future "production" version of the project would need to look like: (e.g. we intend to migrate over to a database, note that the data may grow to large amounts, note that new companies may be added, note that data may need to be hourly, this is a reporting service and will not need to write data to a persistent store, etc. etc.)
 
 ## Stack
-```* indicates I used this for the first time and learned about as I went along.```
+```* indicates I used this for the first time and learned about it as I went along.```
 * Language: Java 8
 * Unit Testing: Junit5 & Mockito
 * Dependency Injection: Guice
 * Logging: Slf4j
-* API: *Spark Framework
+* API: *Spark Framework (http://sparkjava.com/documentation)
 * Build: *Apache Maven
 
 ## Requirements and Usage
-The project can be built using Apache Maven. After downloading the git repository, open the terminal do the following. Assumes at least the Java 8 JDK is set up and the user is on a Macintosh.
+The project can be built using Apache Maven. After downloading the git repository, open the terminal and execute the commands below. Assumes at least the Java 8 JDK is set up and the user is on a Macintosh.
 ```bash
 # navigate to the solution folder of the project.
-cd {base_path}/take-home-exercise-ostium-binarii/solution
+cd {directory where git repo is downloaded}/take-home-exercise-ostium-binarii/solution
 ```
 ```bash
 # unzip the provided apache-maven bin
@@ -30,8 +34,7 @@ unzip apache-maven-3.6.3-bin.zip
 ```
 ```bash
 # temporarily set environment variables for the session to enable Maven commands.
-JAVA_HOME={Java JDK Home on your machine, for me it looks like "/Library/Java/JavaVirtualMachines/jdk-12.0.2.jdk/Contents/Home"} 
-PATH=$PATH:./apache-maven-3.6.3/bin
+JAVA_HOME={Java JDK Home, e.g. "/Library/Java/JavaVirtualMachines/jdk-12.0.2.jdk/Contents/Home"} && PATH=$PATH:./apache-maven-3.6.3/bin
 ```
 ```bash
 # check maven is working.

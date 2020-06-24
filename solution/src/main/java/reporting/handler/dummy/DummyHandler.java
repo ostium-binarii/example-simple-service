@@ -3,7 +3,6 @@ package reporting.handler.dummy;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.NonNull;
 import reporting.handler.Handler;
-import reporting.model.ServiceResponse;
 import spark.Request;
 
 /**
@@ -20,7 +19,7 @@ public class DummyHandler extends Handler {
     }
 
     @Override
-    public ServiceResponse handle(@NonNull Request request) {
+    protected DummyResponse handle(@NonNull Request request) {
         // invoking .scheme() to allow for mocking throwing Exceptions.
         request.scheme();
         return new DummyResponse(TEST_RESPONSE);

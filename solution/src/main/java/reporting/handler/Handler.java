@@ -26,7 +26,7 @@ public abstract class Handler {
     /**
      * Handles requests to API.
      */
-    public abstract ServiceResponse handle(@NonNull final Request request);
+    protected abstract ServiceResponse handle(@NonNull final Request request);
 
     /**
      * Handles request to APIs further applying common rules, such as global exception handling and logging.
@@ -36,7 +36,8 @@ public abstract class Handler {
      * parameters, payload, etc.
      */
     // normally we'd check if the request is null and if so, return a 400, but we're relying on the Spark API framework
-    // to handle this. If @NonNull here throws an NPE we know something has likely gone wrong with Spark.
+    // to handle this. If @NonNull here throws an NPE we know something has likely gone wrong with Spark. Also, a better
+    // name for the method would be "handle", but I got a laugh out of "handleExceptionally" when I named it.
     public ServiceResponse handleExceptionally(@NonNull final Request request, @NonNull final Response response) {
         String handlerName = getClass().getSimpleName();
         log.info("Received request to API {}: host:{} ip:{} etc.", handlerName, request.host(), request.ip());
