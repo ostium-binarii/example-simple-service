@@ -5,9 +5,15 @@
 ## Summary
 Lightweight reporting web service. For the sake of time, the service loads data from the provided CSV file into memory, but provides some modularity to switch over to a seperate data source if need be.
 
-**![Class Diagram](ClassDiagram.pdf)**
+**Solution Class Diagram**
 
-**![Call Flow Diagram: GetDatasetTimeRange]()**
+![Class Diagram](ClassDiagram.xlsx) (click to open)
+
+**Call Flow Diagram: GetDatasetTimeRange**
+
+![Call Flow Diagram: GetDatasetTimeRange](SequenceDiagramGetDatasetTimeRange.png)
+
+Other APIs follow a similar pattern to the above.
 
 **CallOuts**
 
